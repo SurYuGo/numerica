@@ -59,8 +59,8 @@ export async function GET(request, { params }) {
     doc.moveDown(0.5);
     doc.font("Helvetica-Bold").fillColor(ink).text("Sifat utama: ", { continued: true });
     doc.font("Helvetica").fillColor(muted).text(lp.traits.join(", "));
-    doc.font("Helvetica-Bold").fillColor(ink).text("Cocok untuk: ", { continued: true });
-    doc.font("Helvetica").fillColor(muted).text(lp.career);
+    doc.font("Helvetica-Bold").fillColor(ink).text("Catatan: ", { continued: true });
+    doc.font("Helvetica").fillColor(muted).text(lp.highlight);
     doc.moveDown(1.2);
 
     doc.font("Helvetica-Bold").fontSize(15).fillColor(ink)
@@ -86,7 +86,7 @@ export async function GET(request, { params }) {
     doc.moveDown(1.5);
 
     doc.fontSize(9).fillColor("#9090A0").text(
-      "Catatan: laporan ini masih memakai kalkulasi placeholder, bukan rumus numerologi final.",
+      "Numerica — laporan dihasilkan otomatis berdasarkan rumus numerologi Life Path.",
       { width: 483 }
     );
 

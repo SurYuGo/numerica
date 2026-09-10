@@ -206,7 +206,7 @@ export default function Page() {
                     <span className="trait-chip" key={t}>{t}</span>
                   ))}
                 </div>
-                <div className="career-line"><b>Cocok untuk:</b> {result.lifePathCareer}</div>
+                <div className="career-line"><b>Catatan:</b> {result.lifePathHighlight}</div>
                 <div className="btn-row">
                   <button className="btn btn-primary" onClick={() => setStep("element")}>
                     Lihat elemen dasar
@@ -308,8 +308,8 @@ export default function Page() {
         </main>
 
         <footer className="note">
-          Kalkulasi life path saat ini memakai <b>data placeholder</b> sebagai kalkulasi sementara,<br />
-          menunggu rumus numerologi final untuk diimplementasikan. Setiap hasil tersimpan di database.
+          Kalkulasi Life Path memakai rumus numerologi resmi (reduksi digit tanggal lahir).<br />
+          Setiap hasil analisis tersimpan otomatis di database.
         </footer>
       </div>
     </>

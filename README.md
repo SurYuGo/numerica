@@ -12,7 +12,7 @@ Website full-stack (frontend + backend + database) untuk analisis Life Path nume
 | Backend | **Next.js API Routes** | `/api/calculate`, `/api/history`, `/api/report/[id]` |
 | Database | **PostgreSQL** (lewat package `pg`) | Dipilih supaya cocok dengan hosting gratis serverless (lihat `DEPLOY.md`) |
 | Laporan PDF | **pdfkit** (server-side) | Dibuat dari data yang sama yang tersimpan di database |
-| Kalkulasi | Placeholder deterministik | Satu fungsi di `lib/numerology.js`, siap diganti rumus asli |
+| Kalkulasi | **Rumus resmi** (materi Wuterra) | Reduksi digit tanggal lahir (DD+MM+YYYY → 1 digit), interpretasi Angka Akar 1-9 sesuai materi |
 
 ---
 
@@ -44,18 +44,20 @@ Buka **`DEPLOY.md`** — panduan lengkap langkah demi langkah untuk hosting **gr
 
 ---
 
-## Cara mengganti rumus kalkulasi nanti
+## Tentang rumus kalkulasi
 
-Buka `lib/numerology.js`, cari fungsi ini di bagian bawah file:
+Life Path dihitung di `lib/numerology.js`, fungsi `calculateLifePath(birthDate)`, sesuai **Metode 2** dari materi Wuterra: jumlahkan semua digit tanggal lahir (DD+MM+YYYY), reduksi terus sampai 1 digit.
 
 ```javascript
-export function calculateLifePath(fullName, birthDate) {
-  // TODO: ganti isi fungsi ini dengan rumus numerologi resmi
+export function calculateLifePath(birthDate) {
+  // Contoh dari materi: 25-08-1985 -> 2+5+0+8+1+9+8+5 = 38 -> 3+8 = 11 -> 1+1 = 2
   ...
 }
 ```
 
-Ganti isi fungsinya dengan rumus yang benar. Selama fungsi ini tetap menerima `(fullName, birthDate)` dan mengembalikan angka 1-9, **tidak ada bagian lain dari sistem yang perlu diubah**.
+Sudah diverifikasi menghasilkan angka yang sama persis dengan contoh di materi. Interpretasi Angka Akar 1-9 (judul, deskripsi, sifat, catatan) juga sudah diambil langsung dari materi tersebut, di object `LIFE_PATH_DATA` pada file yang sama.
+
+Kalau nanti mau menambahkan **Metode 1** (piramida A-X untuk elemen dominan/hilang, ada di materi tapi belum diimplementasikan) atau menyesuaikan rumus lain, semua tetap di file ini — struktur API, database, dan tampilan tidak perlu diubah selama fungsi ini tetap mengembalikan angka 1-9.
 
 ---
 
@@ -80,4 +82,3 @@ numerica-app/
 ├── package.json
 └── next.config.js
 ```
-"# numerica" 
