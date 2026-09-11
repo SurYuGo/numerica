@@ -23,6 +23,9 @@ html{scroll-behavior:smooth;}
 body{
   margin:0;
   min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
   background:
     radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,161,92,0.10), transparent),
     radial-gradient(ellipse 60% 40% at 90% 100%, rgba(62,130,166,0.10), transparent),
@@ -31,6 +34,21 @@ body{
   font-family:'Sora', sans-serif;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  transition:padding-top .25s ease;
+}
+
+/* Pada layar sangat tinggi (mis. kiosk/signage vertikal), konten diposisikan
+   di tengah secara vertikal alih-alih menempel di atas dengan area kosong
+   besar di bawahnya. Saat keyboard on-screen muncul (class ditambahkan lewat
+   JS di page.js), konten ditarik lebih ke atas supaya tetap dekat dan tidak
+   tertutup keyboard, di layar berapa pun tingginya. */
+body{
+  justify-content:center;
+  align-items:center;
+}
+body.keyboard-open{
+  justify-content:flex-start;
+  padding-top:4vh;
 }
 
 h1,h2,h3,.num-display{
@@ -50,6 +68,7 @@ h1,h2,h3,.num-display{
 .app{
   position:relative;
   z-index:1;
+  width:100%;
   max-width:880px;
   margin:0 auto;
   padding:32px 20px 80px;
@@ -248,15 +267,23 @@ header.top{
 .compat-nums.good span{border-color:rgba(79,138,99,0.5); color:#8FCBA2;}
 .compat-nums.watch span{border-color:rgba(219,106,52,0.5); color:#EDA07A;}
 
-.history{margin-top:36px; border-top:1px solid var(--line); padding-top:20px;}
-.history h3{font-size:13px; font-weight:600; color:var(--ink-muted); margin-bottom:12px;}
-.history-item{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:13px;}
-.history-item .h-name{color:var(--ink);}
-.history-item .h-meta{color:var(--ink-muted);}
-.history-empty{color:var(--ink-muted); font-size:13px;}
-
 footer.note{text-align:center; color:var(--ink-muted); font-size:12px; margin-top:40px; line-height:1.8;}
 footer.note b{color:var(--gold-soft); font-weight:600;}
+
+.total-count{
+  margin-top:32px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-size:13.5px;
+  color:var(--ink-muted);
+}
+.total-count span{
+  font-family:'Fraunces', serif;
+  font-size:18px;
+  font-weight:600;
+  color:var(--gold-soft);
+}
 
 @media (prefers-reduced-motion: reduce){
   .orb{animation:none;}

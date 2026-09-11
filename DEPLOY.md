@@ -44,8 +44,10 @@ Kombinasi yang saya siapkan: **Neon** (PostgreSQL gratis, tanpa kartu kredit) + 
 4. Sebelum klik Deploy, buka bagian **Environment Variables**, tambahkan:
    - **Name:** `DATABASE_URL`
    - **Value:** *(tempel connection string dari Neon di Langkah 1)*
+   - *(opsional tapi disarankan)* tambahkan satu lagi — **Name:** `CRON_SECRET`, **Value:** string acak bebas (mis. `numerica-cron-9f8x`) — ini mengunci endpoint pembersihan data otomatis supaya tidak bisa dipanggil publik.
 5. Klik **Deploy**. Tunggu ± 1-2 menit.
 6. Selesai! Vercel kasih URL publik seperti `numerica-app.vercel.app` — website kamu sudah live dan bisa diakses siapa saja, lengkap dengan database yang benar-benar tersimpan permanen.
+7. Vercel otomatis mengaktifkan **Cron Job** dari `vercel.json` yang sudah ada di project ini — setiap hari jam 3 pagi UTC, data analisis yang lebih dari 30 hari otomatis dihapus. Bisa dicek statusnya di tab **Cron Jobs** pada dashboard project.
 
 ---
 

@@ -26,9 +26,9 @@ export default function Page() {
   const [birthDate, setBirthDate] = useState("");
   const [errors, setErrors] = useState({});
   const [result, setResult] = useState(null);
-  const [history, setHistory] = useState([]);
   const [calcMessage, setCalcMessage] = useState(CALC_MESSAGES[0]);
   const [downloading, setDownloading] = useState(false);
+  const [totalCount, setTotalCount] = useState(null);
   const [submitError, setSubmitError] = useState("");
   const msgIntervalRef = useRef(null);
 
@@ -38,13 +38,32 @@ export default function Page() {
     };
   }, []);
 
-  async function fetchHistory() {
-    try {
-      const res = await fetch("/api/history");
-      if (res.ok) setHistory(await res.json());
-    } catch {
-      // riwayat opsional — diamkan bila gagal
+  // Deteksi keyboard on-screen (Visual Viewport API) supaya layout bisa
+  // menyesuaikan posisi — penting untuk layar sangat tinggi seperti kiosk/
+  // signage vertikal, di mana keyboard bawaan sistem bisa terasa jauh dari
+  // form kalau posisi form tidak ikut menyesuaikan.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    function handleViewportResize() {
+      // Keyboard dianggap terbuka kalau tinggi visual viewport menyusut
+      // signifikan dibanding tinggi layar penuh.
+      const shrunk = vv.height < window.innerHeight * 0.75;
+      document.body.classList.toggle("keyboard-open", shrunk);
     }
+
+    vv.addEventListener("resize", handleViewportResize);
+    return () => vv.removeEventListener("resize", handleViewportResize);
+  }, []);
+
+  // Saat input difokus (keyboard baru saja terbuka), pastikan input itu
+  // tetap terlihat jelas di atas keyboard, di layar berapa pun tingginya.
+  function scrollFieldIntoView(e) {
+    const target = e.target;
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300);
   }
 
   async function handleSubmit(e) {
@@ -88,7 +107,10 @@ export default function Page() {
       const data = await res.json();
       setResult(data);
       setStep("result");
-      fetchHistory();
+      fetch("/api/stats")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((s) => s && setTotalCount(s.total))
+        .catch(() => {});
     } catch (err) {
       clearInterval(msgIntervalRef.current);
       setSubmitError("Tidak bisa terhubung ke server. Coba lagi.");
@@ -167,6 +189,7 @@ export default function Page() {
                       autoComplete="name"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
+                      onFocus={scrollFieldIntoView}
                     />
                     {errors.fullName && <div className="error">{errors.fullName}</div>}
                   </div>
@@ -176,6 +199,7 @@ export default function Page() {
                       type="date" id="dob"
                       value={birthDate}
                       onChange={(e) => setBirthDate(e.target.value)}
+                      onFocus={scrollFieldIntoView}
                     />
                     {errors.birthDate && <div className="error">{errors.birthDate}</div>}
                   </div>
@@ -292,16 +316,11 @@ export default function Page() {
                   <button className="btn btn-ghost" onClick={handleRestart}>Mulai ulang</button>
                 </div>
 
-                <div className="history">
-                  <h3>Riwayat analisis (tersimpan di database)</h3>
-                  {history.length === 0 && <div className="history-empty">Belum ada riwayat.</div>}
-                  {history.map((h) => (
-                    <div className="history-item" key={h.id}>
-                      <span className="h-name">{h.fullName}</span>
-                      <span className="h-meta">Life Path {h.lifePathNumber} · {h.elementName}</span>
-                    </div>
-                  ))}
-                </div>
+                {totalCount !== null && (
+                  <div className="total-count">
+                    Sudah <span>{totalCount.toLocaleString("id-ID")}</span> orang menemukan jalur hidup mereka di sini
+                  </div>
+                )}
               </div>
             </section>
           )}
