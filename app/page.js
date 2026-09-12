@@ -38,27 +38,12 @@ export default function Page() {
     };
   }, []);
 
-  // Deteksi keyboard on-screen (Visual Viewport API) supaya layout bisa
-  // menyesuaikan posisi — penting untuk layar sangat tinggi seperti kiosk/
-  // signage vertikal, di mana keyboard bawaan sistem bisa terasa jauh dari
-  // form kalau posisi form tidak ikut menyesuaikan.
-  useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return;
-
-    function handleViewportResize() {
-      // Keyboard dianggap terbuka kalau tinggi visual viewport menyusut
-      // signifikan dibanding tinggi layar penuh.
-      const shrunk = vv.height < window.innerHeight * 0.75;
-      document.body.classList.toggle("keyboard-open", shrunk);
-    }
-
-    vv.addEventListener("resize", handleViewportResize);
-    return () => vv.removeEventListener("resize", handleViewportResize);
-  }, []);
-
-  // Saat input difokus (keyboard baru saja terbuka), pastikan input itu
-  // tetap terlihat jelas di atas keyboard, di layar berapa pun tingginya.
+  // Saat input difokus, keyboard bawaan sistem akan muncul (biasanya di
+  // bagian bawah layar, di luar kendali halaman web). Supaya input yang
+  // sedang diketik tetap terlihat nyaman meski di layar sangat tinggi
+  // (mis. kiosk), field-nya digeser ke posisi yang enak dilihat di area
+  // yang masih tersisa setelah keyboard muncul — tanpa mengubah posisi
+  // halaman secara keseluruhan.
   function scrollFieldIntoView(e) {
     const target = e.target;
     setTimeout(() => {
