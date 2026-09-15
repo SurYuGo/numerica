@@ -78,6 +78,21 @@ Kalau nanti mau menambahkan **Metode 1** (piramida A-X untuk elemen dominan/hila
 
 ---
 
+## Multi-bahasa (Indonesia / English / 中文)
+
+Website ini sudah mendukung 3 bahasa — pengunjung bisa ganti lewat tombol **ID / EN / 中** di pojok kanan atas. Pilihan bahasa tersimpan otomatis (localStorage) untuk kunjungan berikutnya.
+
+Yang ikut berubah sesuai bahasa: seluruh teks UI, interpretasi Angka Akar 1-9, deskripsi elemen, **dan laporan PDF** (termasuk untuk Mandarin, yang pakai font khusus `assets/fonts/NotoSansSC-Regular.ttf` supaya karakter Hanzi tampil benar — file ini penting, jangan dihapus).
+
+**Kalau nanti mau menambah/mengubah teks:**
+- Teks tombol/label UI → `lib/i18n.js` (object `UI`)
+- Interpretasi Angka Akar & deskripsi elemen → `lib/content.js`
+- Label di laporan PDF → `lib/i18n.js` (object `PDF_LABELS`)
+
+Struktur tiap file konsisten: satu object dengan key `id`, `en`, `zh` — tinggal isi versi terjemahan yang sesuai di key yang sama.
+
+---
+
 ## Struktur project
 
 ```

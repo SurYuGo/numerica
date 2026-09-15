@@ -7,6 +7,12 @@ const nextConfig = {
   // node_modules tanpa dibundel, supaya path file datanya tetap valid.
   experimental: {
     serverComponentsExternalPackages: ["pdfkit", "fontkit"],
+    // Font CJK (untuk laporan PDF berbahasa Mandarin) dimuat lewat fs.readFileSync
+    // dengan path dinamis, yang tidak selalu terdeteksi otomatis oleh output
+    // file tracing Vercel — baris ini memastikan filenya tetap ikut ter-bundle.
+    outputFileTracingIncludes: {
+      "/api/report/[id]": ["./assets/fonts/**"],
+    },
   },
 };
 

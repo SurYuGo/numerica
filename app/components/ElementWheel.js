@@ -1,13 +1,15 @@
 "use client";
 
-import { WHEEL_ORDER, CONTROLLER_OF, ELEMENTS } from "../../lib/numerology";
+import { WHEEL_ORDER, CONTROLLER_OF, ELEMENT_HEX } from "../../lib/numerology";
+import { ELEMENT_CONTENT, normalizeLang } from "../../lib/content";
 
 function polar(cx, cy, r, angleDeg) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
 }
 
-export default function ElementWheel({ activeElement }) {
+export default function ElementWheel({ activeElement, lang = "id" }) {
+  const elementNames = ELEMENT_CONTENT[normalizeLang(lang)];
   const cx = 150, cy = 150, r = 105, nodeR = 30;
   const n = WHEEL_ORDER.length;
   const positions = {};
@@ -67,7 +69,7 @@ export default function ElementWheel({ activeElement }) {
           <g key={elm}>
             <circle
               cx={p.x} cy={p.y} r={isActive ? nodeR + 4 : nodeR}
-              fill={isActive ? ELEMENTS[elm].hex : "rgba(255,255,255,0.05)"}
+              fill={isActive ? ELEMENT_HEX[elm] : "rgba(255,255,255,0.05)"}
               stroke={isActive ? "#E4C98A" : "rgba(255,255,255,0.15)"}
               strokeWidth={isActive ? 2 : 1}
               style={isActive ? { filter: "drop-shadow(0 0 10px rgba(228,201,138,0.7))" } : undefined}
@@ -79,7 +81,7 @@ export default function ElementWheel({ activeElement }) {
               fontWeight={isActive ? 700 : 500}
               fill={isActive ? "#0B0B14" : "rgba(241,238,230,0.75)"}
             >
-              {ELEMENTS[elm].name}
+              {elementNames[elm].name}
             </text>
           </g>
         );

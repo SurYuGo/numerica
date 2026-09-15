@@ -8,6 +8,7 @@ export async function POST(request) {
     const body = await request.json();
     const fullName = (body.fullName || "").trim();
     const birthDate = (body.birthDate || "").trim();
+    const lang = body.lang || "id";
 
     if (!fullName || !birthDate) {
       return Response.json(
@@ -16,7 +17,7 @@ export async function POST(request) {
       );
     }
 
-    const analysis = buildAnalysis(fullName, birthDate);
+    const analysis = buildAnalysis(fullName, birthDate, lang);
 
     const saved = await createAnalysis({
       fullName: analysis.fullName,
